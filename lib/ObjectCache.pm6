@@ -1,17 +1,16 @@
 use v6.c;
 
-role ObjectCache:ver<0.0.1>:auth<cpan:ELIZABETH>[&args2str] {
+role ObjectCache:ver<0.0.2>:auth<cpan:ELIZABETH>[&args2str] {
     has $!WHICH;
 
     my %cache;
     my $lock   := Lock.new;
-    my $prefix := $?CLASS.^name ~ '|';
 
     method !SET-WHICH($!WHICH) { self }
     multi method WHICH(::?CLASS:D:) { $!WHICH }
 
     method bless(*%_) {
-        my $WHICH := $prefix ~ args2str(%_);
+        my $WHICH := self.^name ~ '|' ~ args2str(%_);
         $lock.protect: {
             %cache{$WHICH} //= 
               self.Mu::bless(|%_)!SET-WHICH(ObjAt.new($WHICH))
