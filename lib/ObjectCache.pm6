@@ -1,10 +1,10 @@
 use v6.c;
 
-role ObjectCache:ver<0.0.2>:auth<cpan:ELIZABETH>[&args2str] {
+role ObjectCache:ver<0.0.3>:auth<cpan:ELIZABETH>[&args2str] {
     has $!WHICH;
 
     my %cache;
-    my $lock   := Lock.new;
+    my $lock := Lock.new;
 
     method !SET-WHICH($!WHICH) { self }
     multi method WHICH(::?CLASS:D:) { $!WHICH }
@@ -15,6 +15,10 @@ role ObjectCache:ver<0.0.2>:auth<cpan:ELIZABETH>[&args2str] {
             %cache{$WHICH} //= 
               self.Mu::bless(|%_)!SET-WHICH(ObjAt.new($WHICH))
         }
+    }
+
+    method !EVICT() {
+        $lock.protect: { %cache{$!WHICH}:delete // Nil }
     }
 }
 
@@ -62,6 +66,20 @@ on the C<===> operator functionality, such as C<unique> and C<squish>.
 The format of the value that is being returned by C<WHICH> is only valid
 during a run of a process.  So it should B<not> be stored in any permanent
 medium.
+
+=head2 Removing objects from cache
+
+The C<ObjectCache> role contains a private method C<!EVICT>.  If you'd like
+to have the ability to remove an object from the cache, you should create
+a method in your class that will call this method:
+
+  class Article does ObjectCache[&id] {
+      method remove-from-cache() { self!EVICT }
+      # more stuff
+  }
+
+The C<!EVICT> method returns the object that is removed from the cache,
+or C<Nil> if the object was not in the cache.
 
 =head1 AUTHOR
 
