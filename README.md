@@ -44,6 +44,18 @@ The `ObjectCache` role contains a private method `!EVICT`. If you'd like to have
 
 The `!EVICT` method returns the object that is removed from the cache, or `Nil` if the object was not in the cache.
 
+Clearing the cache completely
+-----------------------------
+
+The `ObjectCache` role contains a private method `!CLEAR`. If you'd like to have the ability to cleare the cache completely, you should create a method in your class that will call this method:
+
+    class Article does ObjectCache[&id] {
+        method clear-cache() { self!CLEAR }
+        # more stuff
+    }
+
+The `!CLEAR` method returns the number of objects that have been removed from the cache.
+
 AUTHOR
 ======
 
@@ -54,7 +66,7 @@ Source can be located at: https://github.com/lizmat/ObjectCache . Comments and P
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright 2020 Elizabeth Mattijsen
+Copyright 2020,2021 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 

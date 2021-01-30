@@ -1,22 +1,26 @@
 {
-  "auth" : "cpan:ELIZABETH",
-  "authors" : [
+  "auth": "cpan:ELIZABETH",
+  "authors": [
     "Elizabeth Mattijsen"
   ],
-  "build-depends" : [ ],
-  "depends" : [ ],
-  "description" : "A role to cache objects",
-  "license" : "Artistic-2.0",
-  "name" : "ObjectCache",
-  "perl" : "6.c",
-  "provides" : {
-    "ObjectCache" : "lib/ObjectCache.pm6"
+  "build-depends": [
+  ],
+  "depends": [
+  ],
+  "description": "A role to cache objects",
+  "license": "Artistic-2.0",
+  "name": "ObjectCache",
+  "perl": "6.d",
+  "provides": {
+    "ObjectCache": "lib/ObjectCache.pm6"
   },
-  "resources" : [ ],
-  "source-url" : "https://github.com/lizmat/ObjectCache.git",
-  "tags" : [
+  "resources": [
+  ],
+  "source-url": "https://github.com/lizmat/ObjectCache.git",
+  "tags": [
     "UTILS"
   ],
-  "test-depends" : [ ],
-  "version" : "0.0.3"
+  "test-depends": [
+  ],
+  "version": "0.0.4"
 }

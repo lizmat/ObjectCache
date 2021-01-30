@@ -1,24 +1,54 @@
-use v6.c;
+use v6.d;
 
-role ObjectCache:ver<0.0.3>:auth<cpan:ELIZABETH>[&args2str] {
+# Using nqp for optimal performance
+use nqp;
+
+role ObjectCache:ver<0.0.4>:auth<cpan:ELIZABETH>[&args2str] {
     has $!WHICH;
 
-    my %cache;
-    my $lock := Lock.new;
+    my $cache := nqp::hash;
+    my $lock  := Lock.new;
+    my $prefix = nqp::concat(::?CLASS.^name,'|');
 
-    method !SET-WHICH($!WHICH) { self }
+    method !SET-WHICH(\WHICH) {
+        $!WHICH := ObjAt.new(WHICH);
+        self
+    }
     multi method WHICH(::?CLASS:D:) { $!WHICH }
 
     method bless(*%_) {
-        my $WHICH := self.^name ~ '|' ~ args2str(%_);
+        my str $WHICH = nqp::concat($prefix,args2str(%_).Str);
         $lock.protect: {
-            %cache{$WHICH} //= 
-              self.Mu::bless(|%_)!SET-WHICH(ObjAt.new($WHICH))
+            nqp::ifnull(
+              nqp::atkey($cache,$WHICH),
+              nqp::bindkey(
+                $cache,
+                $WHICH,
+                self.Mu::bless(|%_)!SET-WHICH($WHICH)
+              )
+            )
         }
     }
 
     method !EVICT() {
-        $lock.protect: { %cache{$!WHICH}:delete // Nil }
+        $lock.protect: {
+            nqp::if(
+              nqp::isnull(my \value := nqp::atkey($cache,$!WHICH)),
+              Nil,
+              nqp::stmts(
+                nqp::deletekey($cache,$!WHICH),
+                value
+              )
+            )
+        }
+    }
+
+    method !CLEAR(--> Int:D) {
+        $lock.protect: {
+            my int $elems = nqp::elems($cache);
+            $cache := nqp::hash;
+            $elems
+        }
     }
 }
 
@@ -81,6 +111,20 @@ a method in your class that will call this method:
 The C<!EVICT> method returns the object that is removed from the cache,
 or C<Nil> if the object was not in the cache.
 
+=head2 Clearing the cache completely
+
+The C<ObjectCache> role contains a private method C<!CLEAR>.  If you'd like
+to have the ability to cleare the cache completely, you should create a
+method in your class that will call this method:
+
+  class Article does ObjectCache[&id] {
+      method clear-cache() { self!CLEAR }
+      # more stuff
+  }
+
+The C<!CLEAR> method returns the number of objects that have been removed
+from the cache.
+
 =head1 AUTHOR
 
 Elizabeth Mattijsen <liz@wenzperl.nl>
@@ -90,11 +134,11 @@ and Pull Requests are welcome.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2020 Elizabeth Mattijsen
+Copyright 2020,2021 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify it under
 the Artistic License 2.0.
 
 =end pod
 
-# vim: ft=perl6 expandtab sw=4
+# vim: expandtab shiftwidth=4

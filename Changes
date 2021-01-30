@@ -2,6 +2,12 @@ Revision history for ObjectCache
 
 {{$NEXT}}
 
+0.0.4  2021-01-30T18:54:30+01:00
+    - Add !CLEAR method for clearing the whole cache
+    - Make caching overhead about 30% faster by using NQP
+    - Upped Raku version to 6.d
+    - Update copyright year
+
 0.0.3  2020-03-11T10:38:45+01:00
     - Add !EVICT method for removing object from cache
 
