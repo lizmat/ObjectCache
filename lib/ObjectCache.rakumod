@@ -3,7 +3,7 @@ use v6.d;
 # Using nqp for optimal performance
 use nqp;
 
-role ObjectCache:ver<0.0.4>:auth<cpan:ELIZABETH>[&args2str] {
+role ObjectCache:ver<0.0.5>:auth<zef:lizmat>[&args2str] {
     has $!WHICH;
 
     my $cache := nqp::hash;
@@ -11,7 +11,7 @@ role ObjectCache:ver<0.0.4>:auth<cpan:ELIZABETH>[&args2str] {
     my $prefix = nqp::concat(::?CLASS.^name,'|');
 
     method !SET-WHICH(\WHICH) {
-        $!WHICH := ObjAt.new(WHICH);
+        $!WHICH := nqp::box_s(WHICH,ObjAt);
         self
     }
     multi method WHICH(::?CLASS:D:) { $!WHICH }
@@ -127,14 +127,14 @@ from the cache.
 
 =head1 AUTHOR
 
-Elizabeth Mattijsen <liz@wenzperl.nl>
+Elizabeth Mattijsen <liz@raku.rocks>
 
 Source can be located at: https://github.com/lizmat/ObjectCache . Comments
 and Pull Requests are welcome.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2020,2021 Elizabeth Mattijsen
+Copyright 2020, 2021 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify it under
 the Artistic License 2.0.

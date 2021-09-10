@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/lizmat/ObjectCache/workflows/test/badge.svg)](https://github.com/lizmat/ObjectCache/actions)
+
 NAME
 ====
 
@@ -59,14 +61,14 @@ The `!CLEAR` method returns the number of objects that have been removed from th
 AUTHOR
 ======
 
-Elizabeth Mattijsen <liz@wenzperl.nl>
+Elizabeth Mattijsen <liz@raku.rocks>
 
 Source can be located at: https://github.com/lizmat/ObjectCache . Comments and Pull Requests are welcome.
 
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright 2020,2021 Elizabeth Mattijsen
+Copyright 2020, 2021 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 

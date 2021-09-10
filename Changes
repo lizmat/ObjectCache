@@ -2,6 +2,11 @@ Revision history for ObjectCache
 
 {{$NEXT}}
 
+0.0.5  2021-09-10T11:33:38+02:00
+    - Change file extension to .rakumod
+    - Migrate to zef ecosystem
+    - Update email address
+
 0.0.4  2021-01-30T18:54:30+01:00
     - Add !CLEAR method for clearing the whole cache
     - Make caching overhead about 30% faster by using NQP

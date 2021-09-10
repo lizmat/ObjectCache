@@ -7,7 +7,8 @@ plan 7;
 sub id(%h --> Int:D) {
     %h<id> or die "Must have an id";
 }
-class Article does ObjectCache[&id] {
+#class Article does ObjectCache[&id] {
+class Article does ObjectCache[{.<id> // die}] {
     has $.id;
 
     method remove-from-cache() { self!EVICT }
