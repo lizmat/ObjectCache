@@ -8,18 +8,20 @@ ObjectCache - A role to cache objects
 SYNOPSIS
 ========
 
-    use ObjectCache;
+```raku
+use ObjectCache;
 
-    sub id(%h --> Int:D) {
-        %h<id> or die "must have an id";
-    }
+sub id(%h --> Int:D) {
+    %h<id> or die "must have an id";
+}
 
-    class Article does ObjectCache[&id] {
-        has $.id;
-        # has many more attributes
-    }
+class Article does ObjectCache[&id] {
+    has $.id;
+    # has many more attributes
+}
 
-    say Article.new(id => 42666789).WHICH;  # Article|42666789
+say Article.new(id => 42666789).WHICH;  # Article|42666789
+```
 
 DESCRIPTION
 ===========
@@ -39,10 +41,12 @@ Removing objects from cache
 
 The `ObjectCache` role contains a private method `!EVICT`. If you'd like to have the ability to remove an object from the cache, you should create a method in your class that will call this method:
 
-    class Article does ObjectCache[&id] {
-        method remove-from-cache() { self!EVICT }
-        # more stuff
-    }
+```raku
+class Article does ObjectCache[&id] {
+    method remove-from-cache() { self!EVICT }
+    # more stuff
+}
+```
 
 The `!EVICT` method returns the object that is removed from the cache, or `Nil` if the object was not in the cache.
 
@@ -51,10 +55,12 @@ Clearing the cache completely
 
 The `ObjectCache` role contains a private method `!CLEAR`. If you'd like to have the ability to cleare the cache completely, you should create a method in your class that will call this method:
 
-    class Article does ObjectCache[&id] {
-        method clear-cache() { self!CLEAR }
-        # more stuff
-    }
+```raku
+class Article does ObjectCache[&id] {
+    method clear-cache() { self!CLEAR }
+    # more stuff
+}
+```
 
 The `!CLEAR` method returns the number of objects that have been removed from the cache.
 
@@ -65,10 +71,12 @@ Elizabeth Mattijsen <liz@raku.rocks>
 
 Source can be located at: https://github.com/lizmat/ObjectCache . Comments and Pull Requests are welcome.
 
+If you like this module, or what I’m doing more generally, committing to a [small sponsorship](https://github.com/sponsors/lizmat/) would mean a great deal to me!
+
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright 2020, 2021 Elizabeth Mattijsen
+Copyright 2020, 2021, 2024 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 

@@ -3,7 +3,7 @@ use v6.d;
 # Using nqp for optimal performance
 use nqp;
 
-role ObjectCache:ver<0.0.5>:auth<zef:lizmat>[&args2str] {
+role ObjectCache[&args2str] {
     has $!WHICH;
 
     my $cache := nqp::hash;
@@ -60,18 +60,22 @@ ObjectCache - A role to cache objects
 
 =head1 SYNOPSIS
 
-  use ObjectCache;
+=begin code :lang<raku>
 
-  sub id(%h --> Int:D) {
-      %h<id> or die "must have an id";
-  }
+use ObjectCache;
 
-  class Article does ObjectCache[&id] {
-      has $.id;
-      # has many more attributes
-  }
+sub id(%h --> Int:D) {
+    %h<id> or die "must have an id";
+}
 
-  say Article.new(id => 42666789).WHICH;  # Article|42666789
+class Article does ObjectCache[&id] {
+    has $.id;
+    # has many more attributes
+}
+
+say Article.new(id => 42666789).WHICH;  # Article|42666789
+
+=end code
 
 =head1 DESCRIPTION
 
@@ -103,10 +107,14 @@ The C<ObjectCache> role contains a private method C<!EVICT>.  If you'd like
 to have the ability to remove an object from the cache, you should create
 a method in your class that will call this method:
 
-  class Article does ObjectCache[&id] {
-      method remove-from-cache() { self!EVICT }
-      # more stuff
-  }
+=begin code :lang<raku>
+
+class Article does ObjectCache[&id] {
+    method remove-from-cache() { self!EVICT }
+    # more stuff
+}
+
+=end code
 
 The C<!EVICT> method returns the object that is removed from the cache,
 or C<Nil> if the object was not in the cache.
@@ -117,10 +125,14 @@ The C<ObjectCache> role contains a private method C<!CLEAR>.  If you'd like
 to have the ability to cleare the cache completely, you should create a
 method in your class that will call this method:
 
-  class Article does ObjectCache[&id] {
-      method clear-cache() { self!CLEAR }
-      # more stuff
-  }
+=begin code :lang<raku>
+
+class Article does ObjectCache[&id] {
+    method clear-cache() { self!CLEAR }
+    # more stuff
+}
+
+=end code
 
 The C<!CLEAR> method returns the number of objects that have been removed
 from the cache.
@@ -132,9 +144,13 @@ Elizabeth Mattijsen <liz@raku.rocks>
 Source can be located at: https://github.com/lizmat/ObjectCache . Comments
 and Pull Requests are welcome.
 
+If you like this module, or what I’m doing more generally, committing to a
+L<small sponsorship|https://github.com/sponsors/lizmat/>  would mean a great
+deal to me!
+
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2020, 2021 Elizabeth Mattijsen
+Copyright 2020, 2021, 2024 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify it under
 the Artistic License 2.0.

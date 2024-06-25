@@ -2,6 +2,12 @@ Revision history for ObjectCache
 
 {{$NEXT}}
 
+0.0.6  2024-06-25T12:20:14+02:00
+    - Modernize test file extension
+    - Modernize pod
+    - Add sponsor link and button
+    - Update copyright year
+
 0.0.5  2021-09-10T11:33:38+02:00
     - Change file extension to .rakumod
     - Migrate to zef ecosystem
